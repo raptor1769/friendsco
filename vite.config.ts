@@ -3,35 +3,35 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
-const rawPort = process.env.PORT;
-const port = rawPort !== undefined ? Number(rawPort) : 4173;
-
-if (rawPort !== undefined && (Number.isNaN(port) || port <= 0)) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
-
-const basePath = process.env.BASE_PATH || "/";
+const repoName = "friendsco";
 
 export default defineConfig({
-  base: basePath,
-  plugins: [
-    react(),
-    tailwindcss(),
-  ],
+  base: `/${repoName}/`,
+
+  plugins: [react(), tailwindcss()],
+
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),
-      "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
+      "@assets": path.resolve(
+        import.meta.dirname,
+        "..",
+        "..",
+        "attached_assets",
+      ),
     },
     dedupe: ["react", "react-dom"],
   },
+
   root: path.resolve(import.meta.dirname),
+
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: "dist",
     emptyOutDir: true,
   },
+
   server: {
-    port,
+    port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
     strictPort: true,
     host: "0.0.0.0",
     allowedHosts: true,
@@ -39,8 +39,9 @@ export default defineConfig({
       strict: true,
     },
   },
+
   preview: {
-    port,
+    port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
     host: "0.0.0.0",
     allowedHosts: true,
   },
