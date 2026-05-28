@@ -1,14 +1,15 @@
 import React from "react";
 import { Link } from "wouter";
 import { Anchor } from "lucide-react";
+import { services } from "@/components/sections/Services";
 
 export function Footer() {
   return (
     <footer className="bg-slate-950 py-16 text-gray-400 text-sm border-t border-white/5">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr] gap-12 mb-12">
           
-          <div className="md:col-span-1">
+          <div>
             <Link href="/" className="flex items-center gap-2 mb-6">
               <div className="p-1.5 rounded bg-primary flex items-center justify-center">
                 <Anchor className="w-4 h-4 text-white" />
@@ -25,32 +26,23 @@ export function Footer() {
           <div>
             <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-xs">Services</h4>
             <ul className="space-y-3">
-              <li><a href="#services" className="hover:text-primary transition-colors">Ocean Freight (FCL/LCL)</a></li>
-              <li><a href="#services" className="hover:text-primary transition-colors">Air Freight Expedited</a></li>
-              <li><a href="#services" className="hover:text-primary transition-colors">Intermodal & Drayage</a></li>
-              <li><a href="#services" className="hover:text-primary transition-colors">Contract Logistics</a></li>
-              <li><a href="#expertise" className="hover:text-primary transition-colors">Customs Brokerage</a></li>
+              {services.map((service) => (
+                <li key={service.slug}>
+                  <Link href={`/services/${service.slug}`} className="hover:text-primary transition-colors">
+                    {service.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-xs">Company</h4>
             <ul className="space-y-3">
-              <li><a href="#" className="hover:text-primary transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Global Network</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Sustainability</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Careers</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Contact</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-xs">Legal</h4>
-            <ul className="space-y-3">
-              <li><a href="#" className="hover:text-primary transition-colors">Terms & Conditions</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Bill of Lading Terms</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Licenses & Certifications</a></li>
+              <li><Link href="/services" className="hover:text-primary transition-colors">All Services</Link></li>
+              <li><Link href="/global-reach" className="hover:text-primary transition-colors">Global Reach</Link></li>
+              <li><Link href="/expertise" className="hover:text-primary transition-colors">Expertise</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
             </ul>
           </div>
         </div>

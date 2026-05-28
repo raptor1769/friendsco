@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import heroImg from "@/assets/hero.png";
 
@@ -42,23 +43,19 @@ export function Hero() {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
+                asChild
                 size="lg" 
                 className="text-base h-14 px-8 bg-primary hover:bg-primary/90 text-white border-0"
-                onClick={() => {
-                  document.getElementById('quote')?.scrollIntoView({ behavior: 'smooth' });
-                }}
               >
-                Get a Freight Quote
+                <Link href="/contact">Get a Freight Quote</Link>
               </Button>
               <Button 
+                asChild
                 size="lg" 
                 variant="outline" 
                 className="text-base h-14 px-8 bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white"
-                onClick={() => {
-                  document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-                }}
               >
-                Explore Services
+                <Link href="/services">Explore Services</Link>
               </Button>
             </div>
           </motion.div>

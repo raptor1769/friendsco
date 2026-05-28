@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CheckCircle2 } from "lucide-react";
+import { getServiceBySlug, services } from "@/components/sections/Services";
 
 const quoteSchema = z.object({
   fullName: z.string().min(2, "Name is required"),
@@ -27,8 +28,13 @@ const quoteSchema = z.object({
 
 type QuoteFormValues = z.infer<typeof quoteSchema>;
 
-export function Contact() {
+type ContactProps = {
+  selectedServiceSlug?: string;
+};
+
+export function Contact({ selectedServiceSlug }: ContactProps) {
   const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const selectedService = getServiceBySlug(selectedServiceSlug);
 
   const form = useForm<QuoteFormValues>({
     resolver: zodResolver(quoteSchema),
@@ -36,16 +42,20 @@ export function Contact() {
       fullName: "",
       company: "",
       email: "",
-      freightType: "",
+      freightType: selectedService?.slug ?? "",
       origin: "",
       destination: "",
       details: "",
     },
   });
 
+  React.useEffect(() => {
+    form.setValue("freightType", selectedService?.slug ?? "");
+  }, [form, selectedService?.slug]);
+
   const onSubmit = (data: QuoteFormValues) => {
-    // Client-side only simulation
-    console.log("Quote Request Submitted:", data);
+    // Client-side only simulation. Wire this to an API/email service when backend handling is ready.
+    void data;
     setIsSubmitted(true);
   };
 
@@ -113,7 +123,15 @@ export function Contact() {
                   variant="outline" 
                   onClick={() => {
                     setIsSubmitted(false);
-                    form.reset();
+                    form.reset({
+                      fullName: "",
+                      company: "",
+                      email: "",
+                      freightType: selectedService?.slug ?? "",
+                      origin: "",
+                      destination: "",
+                      details: "",
+                    });
                   }}
                 >
                   Submit Another Request
@@ -121,7 +139,12 @@ export function Contact() {
               </div>
             ) : (
               <>
-                <h4 className="text-2xl font-bold mb-6">Request a Freight Quote</h4>
+                <h4 className="text-2xl font-bold mb-2">Request a Freight Quote</h4>
+                {selectedService && (
+                  <p className="text-sm text-muted-foreground mb-6">
+                    We have preselected {selectedService.title}. Share the lane details and our team will tailor the quote around that service.
+                  </p>
+                )}
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -150,16 +173,19 @@ export function Contact() {
 
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">Freight Type</label>
-                    <Select onValueChange={(val) => form.setValue("freightType", val)}>
+                    <Select
+                      value={form.watch("freightType")}
+                      onValueChange={(val) => form.setValue("freightType", val, { shouldValidate: true })}
+                    >
                       <SelectTrigger className="bg-slate-50">
                         <SelectValue placeholder="Select transport mode" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="fcl">Ocean Freight (FCL)</SelectItem>
-                        <SelectItem value="lcl">Ocean Freight (LCL)</SelectItem>
-                        <SelectItem value="air">Air Freight</SelectItem>
-                        <SelectItem value="land">Land Transportation</SelectItem>
-                        <SelectItem value="multimodal">Intermodal / Multimodal</SelectItem>
+                        {services.map((service) => (
+                          <SelectItem key={service.slug} value={service.slug}>
+                            {service.quotePrompt}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     {form.formState.errors.freightType && (

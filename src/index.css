@@ -130,4 +130,28 @@
   html {
     scroll-behavior: smooth;
   }
+
+  * {
+    caret-color: transparent;
+  }
+
+  input,
+  textarea,
+  select,
+  [contenteditable="true"] {
+    caret-color: auto;
+  }
+
+  .site-header,
+  .site-header * {
+    cursor: default;
+    user-select: none;
+  }
+
+  .site-header a,
+  .site-header button,
+  .site-header [role="button"],
+  .site-header [role="menuitem"] {
+    cursor: pointer;
+  }
 }

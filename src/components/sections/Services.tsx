@@ -1,41 +1,85 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Anchor, Plane, Truck, Package } from "lucide-react";
+import { Link } from "wouter";
+import { Anchor, Plane, Truck, Package, type LucideIcon } from "lucide-react";
 import seaImg from "@/assets/sea-freight.png";
 import airImg from "@/assets/air-freight.png";
 import landImg from "@/assets/land-transport.png";
 import warehouseImg from "@/assets/warehouse.png";
 
-const services = [
+export type Service = {
+  title: string;
+  slug: string;
+  description: string;
+  icon: LucideIcon;
+  image: string;
+  tags: string[];
+  highlights: string[];
+  quotePrompt: string;
+};
+
+export const services: Service[] = [
   {
     title: "Ocean Freight",
+    slug: "ocean-freight",
     description: "Reliable FCL and LCL container shipping across major global trade lanes. We negotiate competitive rates with top-tier carriers to ensure capacity when you need it most.",
     icon: Anchor,
     image: seaImg,
-    tags: ["FCL & LCL", "Reefer Cargo", "OOG/Breakbulk"]
+    tags: ["FCL & LCL", "Reefer Cargo", "OOG/Breakbulk"],
+    highlights: [
+      "FCL and LCL planning across major port pairs",
+      "Carrier space management during peak season",
+      "Documentation support for bills of lading and customs handoff",
+    ],
+    quotePrompt: "Ocean Freight",
   },
   {
     title: "Air Freight",
+    slug: "air-freight",
     description: "Expedited logistics for time-critical cargo. Our established airline partnerships guarantee priority boarding and secure transit from origin airport to final destination.",
     icon: Plane,
     image: airImg,
-    tags: ["Next Flight Out", "Consolidated", "Charter Services"]
+    tags: ["Next Flight Out", "Consolidated", "Charter Services"],
+    highlights: [
+      "Priority uplift for urgent commercial shipments",
+      "Consolidated air freight for balanced cost and speed",
+      "Airport-to-door coordination with proactive milestone updates",
+    ],
+    quotePrompt: "Air Freight",
   },
-  // {
-  //   title: "Land Transportation",
-  //   description: "Seamless domestic and cross-border trucking. We manage drayage, intermodal rail, and final-mile delivery to connect ports and airports directly to your facilities.",
-  //   icon: Truck,
-  //   image: landImg,
-  //   tags: ["FTL & LTL", "Port Drayage", "Intermodal Rail"]
-  // },
-  // {
-  //   title: "Contract Logistics",
-  //   description: "Strategic warehousing and distribution solutions. We handle inventory management, cross-docking, and order fulfillment in secure, strategically located facilities.",
-  //   icon: Package,
-  //   image: warehouseImg,
-  //   tags: ["Cross-docking", "Inventory Control", "Fulfillment"]
-  // }
+  {
+    title: "Land Transportation",
+    slug: "land-transportation",
+    description: "Seamless domestic and cross-border trucking. We manage drayage, intermodal rail, and final-mile delivery to connect ports and airports directly to your facilities.",
+    icon: Truck,
+    image: landImg,
+    tags: ["FTL & LTL", "Port Drayage", "Intermodal Rail"],
+    highlights: [
+      "Port drayage, domestic trucking, and final-mile delivery",
+      "FTL and LTL options matched to shipment size and urgency",
+      "Intermodal rail solutions for cost-efficient inland moves",
+    ],
+    quotePrompt: "Land Transportation",
+  },
+  {
+    title: "Contract Logistics",
+    slug: "contract-logistics",
+    description: "Strategic warehousing and distribution solutions. We handle inventory management, cross-docking, and order fulfillment in secure, strategically located facilities.",
+    icon: Package,
+    image: warehouseImg,
+    tags: ["Cross-docking", "Inventory Control", "Fulfillment"],
+    highlights: [
+      "Flexible warehousing near key ports and consumption markets",
+      "Cross-docking programs that shorten dwell time",
+      "Inventory control and fulfillment support for growing operations",
+    ],
+    quotePrompt: "Contract Logistics",
+  },
 ];
+
+export function getServiceBySlug(slug?: string) {
+  return services.find((service) => service.slug === slug);
+}
 
 export function Services() {
   return (
@@ -78,15 +122,18 @@ export function Services() {
                 <p className="text-muted-foreground mb-6 leading-relaxed">
                   {service.description}
                 </p>
-                <div className="flex flex-wrap items-center">
-                  {/* {service.tags.map(tag => (
+                <div className="flex flex-wrap items-center gap-2">
+                  {service.tags.map(tag => (
                     <span key={tag} className="px-3 py-1 bg-white text-xs font-semibold text-muted-foreground rounded-md shadow-sm border border-border">
                       {tag}
                     </span>
-                  ))} */}
-                  <button className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-md shadow-sm hover:bg-primary/90 transition-colors">
+                  ))}
+                  <Link
+                    href={`/services/${service.slug}`}
+                    className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-md shadow-sm hover:bg-primary/90 transition-colors"
+                  >
                     Learn more
-                  </button>
+                  </Link>
                 </div>
               </div>
             </motion.div>
