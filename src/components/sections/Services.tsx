@@ -87,13 +87,16 @@ export function Services() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-sm font-bold text-primary tracking-widest uppercase mb-3">Core Capabilities</h2>
+            <h2 className="text-sm font-bold text-primary tracking-widest uppercase mb-3">
+              Core Capabilities
+            </h2>
             <h3 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight">
               Comprehensive freight solutions for modern supply chains.
             </h3>
           </div>
           <p className="text-muted-foreground text-lg max-w-md">
-            We don't just move cargo; we engineer routes that optimize for cost, speed, and reliability.
+            We don't just move cargo; we engineer routes that optimize for cost,
+            speed, and reliability.
           </p>
         </div>
 
@@ -107,10 +110,10 @@ export function Services() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group relative overflow-hidden rounded-xl bg-muted border border-border"
             >
-              <div className="aspect-[16/9] overflow-hidden">
-                <img 
-                  src={service.image} 
-                  alt={service.title} 
+              <div className="aspect-video overflow-hidden">
+                <img
+                  src={service.image}
+                  alt={service.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
@@ -118,13 +121,18 @@ export function Services() {
                 <div className="w-12 h-12 bg-white rounded-lg shadow-sm flex items-center justify-center mb-6 -mt-14 relative z-10">
                   <service.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h4 className="text-2xl font-bold text-foreground mb-3">{service.title}</h4>
+                <h4 className="text-2xl font-bold text-foreground mb-3">
+                  {service.title}
+                </h4>
                 <p className="text-muted-foreground mb-6 leading-relaxed">
                   {service.description}
                 </p>
                 <div className="flex flex-wrap items-center gap-2">
-                  {service.tags.map(tag => (
-                    <span key={tag} className="px-3 py-1 bg-white text-xs font-semibold text-muted-foreground rounded-md shadow-sm border border-border">
+                  {service.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 bg-white text-xs font-semibold text-muted-foreground rounded-md shadow-sm border border-border"
+                    >
                       {tag}
                     </span>
                   ))}

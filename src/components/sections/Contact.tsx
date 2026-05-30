@@ -163,43 +163,63 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
   };
 
   return (
-    <section id="quote" className="py-24 bg-slate-950 text-white relative overflow-hidden">
+    <section
+      id="quote"
+      className="py-24 bg-slate-950 text-white relative overflow-hidden"
+    >
       {/* Abstract background element */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/3 -translate-y-1/4" />
-      
+      <div className="absolute top-0 right-0 w-200 h-200 bg-primary/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/3 -translate-y-1/4" />
+
       <div className="container relative z-10 mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-16">
-          
           {/* Text Content */}
           <div className="flex flex-col justify-center">
-            <h2 className="text-sm font-bold text-primary tracking-widest uppercase mb-3">Partner With Us</h2>
+            <h2 className="text-sm font-bold text-primary tracking-widest uppercase mb-3">
+              Partner With Us
+            </h2>
             <h3 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
               Ready to optimize your supply chain?
             </h3>
             <p className="text-lg text-gray-400 mb-8 leading-relaxed max-w-lg">
-              Provide your cargo details, and our logistics engineers will craft a comprehensive routing plan and competitive quote within 24 hours.
+              Provide your cargo details, and our logistics engineers will craft
+              a comprehensive routing plan and competitive quote within 24
+              hours.
             </p>
-            
+
             <div className="space-y-6 text-gray-300">
               <div className="flex items-start gap-4">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
                 <div>
-                  <h5 className="font-semibold text-white">Dedicated Account Manager</h5>
-                  <p className="text-sm">A single point of contact for your entire logistics portfolio.</p>
+                  <h5 className="font-semibold text-white">
+                    Dedicated Account Manager
+                  </h5>
+                  <p className="text-sm">
+                    A single point of contact for your entire logistics
+                    portfolio.
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
                 <div>
-                  <h5 className="font-semibold text-white">Guaranteed Capacity</h5>
-                  <p className="text-sm">Secured space even during peak shipping seasons.</p>
+                  <h5 className="font-semibold text-white">
+                    Guaranteed Capacity
+                  </h5>
+                  <p className="text-sm">
+                    Secured space even during peak shipping seasons.
+                  </p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
                 <div>
-                  <h5 className="font-semibold text-white">Transparent Pricing</h5>
-                  <p className="text-sm">No hidden fees. Clear breakdown of freight, terminal, and brokerage costs.</p>
+                  <h5 className="font-semibold text-white">
+                    Transparent Pricing
+                  </h5>
+                  <p className="text-sm">
+                    No hidden fees. Clear breakdown of freight, terminal, and
+                    brokerage costs.
+                  </p>
                 </div>
               </div>
             </div>
@@ -218,12 +238,15 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
                 <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h4 className="text-2xl font-bold mb-2">Quote Request Received</h4>
+                <h4 className="text-2xl font-bold mb-2">
+                  Quote Request Received
+                </h4>
                 <p className="text-muted-foreground mb-8 max-w-sm">
-                  Thank you. Our pricing team is analyzing your route and will contact you at {form.getValues().email} shortly.
+                  Thank you. Our pricing team is analyzing your route and will
+                  contact you at {form.getValues().email} shortly.
                 </p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="cursor-pointer"
                   onClick={() => {
                     setIsSubmitted(false);
@@ -245,48 +268,88 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
               </div>
             ) : (
               <>
-                <h4 className="text-2xl font-bold mb-2">Request a Freight Quote</h4>
+                <h4 className="text-2xl font-bold mb-2">
+                  Request a Freight Quote
+                </h4>
                 {selectedService && (
                   <p className="text-sm text-muted-foreground mb-6">
-                    We have preselected {selectedService.title}. Share the lane details and our team will tailor the quote around that service.
+                    We have preselected {selectedService.title}. Share the lane
+                    details and our team will tailor the quote around that
+                    service.
                   </p>
                 )}
-                <form onSubmit={form.handleSubmit(onSubmit, handleInvalidSubmit)} className="space-y-4" noValidate>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit, handleInvalidSubmit)}
+                  className="space-y-4"
+                  noValidate
+                >
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-sm font-semibold">Full Name</label>
-                      <Input {...form.register("fullName")} placeholder="John Doe" className={fieldClassName("fullName")} />
+                      <Input
+                        {...form.register("fullName")}
+                        placeholder="John Doe"
+                        className={fieldClassName("fullName")}
+                      />
                       {form.formState.errors.fullName && (
-                        <p className="text-xs text-destructive">{form.formState.errors.fullName.message}</p>
+                        <p className="text-xs text-destructive">
+                          {form.formState.errors.fullName.message}
+                        </p>
                       )}
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-semibold">Company</label>
-                      <Input {...form.register("company")} placeholder="Acme Corp" className={fieldClassName("company")} />
+                      <Input
+                        {...form.register("company")}
+                        placeholder="Acme Corp"
+                        className={fieldClassName("company")}
+                      />
                       {form.formState.errors.company && (
-                        <p className="text-xs text-destructive">{form.formState.errors.company.message}</p>
+                        <p className="text-xs text-destructive">
+                          {form.formState.errors.company.message}
+                        </p>
                       )}
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Email Address</label>
-                    <Input {...form.register("email")} type="email" placeholder="john@example.com" className={fieldClassName("email")} />
+                    <label className="text-sm font-semibold">
+                      Email Address
+                    </label>
+                    <Input
+                      {...form.register("email")}
+                      type="email"
+                      placeholder="john@example.com"
+                      className={fieldClassName("email")}
+                    />
                     {form.formState.errors.email && (
-                      <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>
+                      <p className="text-xs text-destructive">
+                        {form.formState.errors.email.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Phone Number</label>
-                    <Input {...form.register("phone")} type="tel" placeholder="+1 555 123 4567" className={fieldClassName("phone")} />
+                    <label className="text-sm font-semibold">
+                      Phone Number
+                    </label>
+                    <Input
+                      {...form.register("phone")}
+                      type="tel"
+                      placeholder="+1 555 123 4567"
+                      className={fieldClassName("phone")}
+                    />
                     {form.formState.errors.phone && (
-                      <p className="text-xs text-destructive">{form.formState.errors.phone.message}</p>
+                      <p className="text-xs text-destructive">
+                        {form.formState.errors.phone.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Freight Type</label>
+                    <label className="text-sm font-semibold">
+                      Freight Type
+                    </label>
                     <Select
                       value={form.watch("freightType")}
                       onValueChange={(val) => {
@@ -309,36 +372,56 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
                       </SelectContent>
                     </Select>
                     {form.formState.errors.freightType && (
-                      <p className="text-xs text-destructive">{form.formState.errors.freightType.message}</p>
+                      <p className="text-xs text-destructive">
+                        {form.formState.errors.freightType.message}
+                      </p>
                     )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-sm font-semibold">Origin</label>
-                      <Input {...form.register("origin")} placeholder="e.g. Shanghai, CN" className={fieldClassName("origin")} />
+                      <Input
+                        {...form.register("origin")}
+                        placeholder="e.g. Shanghai, CN"
+                        className={fieldClassName("origin")}
+                      />
                       {form.formState.errors.origin && (
-                        <p className="text-xs text-destructive">{form.formState.errors.origin.message}</p>
+                        <p className="text-xs text-destructive">
+                          {form.formState.errors.origin.message}
+                        </p>
                       )}
                     </div>
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold">Destination</label>
-                      <Input {...form.register("destination")} placeholder="e.g. Los Angeles, US" className={fieldClassName("destination")} />
+                      <label className="text-sm font-semibold">
+                        Destination
+                      </label>
+                      <Input
+                        {...form.register("destination")}
+                        placeholder="e.g. Los Angeles, US"
+                        className={fieldClassName("destination")}
+                      />
                       {form.formState.errors.destination && (
-                        <p className="text-xs text-destructive">{form.formState.errors.destination.message}</p>
+                        <p className="text-xs text-destructive">
+                          {form.formState.errors.destination.message}
+                        </p>
                       )}
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Cargo Details (Cargo type, Commodity, Weight, Volume)</label>
-                    <Textarea 
-                      {...form.register("details")} 
+                    <label className="text-sm font-semibold">
+                      Cargo Details (Cargo type, Commodity, Weight, Volume)
+                    </label>
+                    <Textarea
+                      {...form.register("details")}
                       placeholder="Please provide details about the cargo, required Incoterms, and target dates."
                       className={fieldClassName("details", "resize-none h-24")}
                     />
                     {form.formState.errors.details && (
-                      <p className="text-xs text-destructive">{form.formState.errors.details.message}</p>
+                      <p className="text-xs text-destructive">
+                        {form.formState.errors.details.message}
+                      </p>
                     )}
                   </div>
 
@@ -350,7 +433,10 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
                     {isSending ? "Sending..." : "Request Quote"}
                   </Button>
                   {submitError && (
-                    <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-center text-sm text-destructive" role="alert">
+                    <p
+                      className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-center text-sm text-destructive"
+                      role="alert"
+                    >
                       {submitError}
                     </p>
                   )}
@@ -358,7 +444,6 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
               </>
             )}
           </motion.div>
-
         </div>
       </div>
     </section>

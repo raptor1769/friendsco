@@ -111,9 +111,9 @@ export function Navbar() {
               <DropdownMenuContent
                 align="center"
                 sideOffset={18}
-                className="w-[380px] overflow-hidden rounded-[1.4rem] border border-slate-200 bg-white p-3 text-foreground shadow-[0_24px_70px_rgba(15,23,42,0.22)] ring-1 ring-slate-950/5"
+                className="w-95 overflow-hidden rounded-[1.4rem] border border-slate-200 bg-white p-3 text-foreground shadow-[0_24px_70px_rgba(15,23,42,0.22)] ring-1 ring-slate-950/5"
               >
-                <div className="mb-2 rounded-2xl bg-gradient-to-br from-slate-950 to-slate-800 px-4 py-4 text-white shadow-inner">
+                <div className="mb-2 rounded-2xl bg-linear-to-br from-slate-950 to-slate-800 px-4 py-4 text-white shadow-inner">
                   <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
                     Freight Services
                   </p>
@@ -210,7 +210,7 @@ export function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="absolute top-full left-3 right-3 rounded-b-[1.5rem] border border-slate-200 bg-white p-4 shadow-[0_24px_60px_rgba(15,23,42,0.24)] ring-1 ring-slate-950/5 md:hidden">
+        <div className="absolute top-full left-3 right-3 rounded-b-3xl border border-slate-200 bg-white p-4 shadow-[0_24px_60px_rgba(15,23,42,0.24)] ring-1 ring-slate-950/5 md:hidden">
           <div className="mb-4 rounded-2xl border border-slate-100 bg-slate-50 p-3 shadow-inner">
             <Link
               href="/services"

@@ -34,7 +34,7 @@ export function Hero() {
 
             <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
               Precision Freight. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">
+              <span className="text-transparent bg-clip-text bg-linear-to-r from-primary to-orange-400">
                 Global Certainty.
               </span>
             </h1>
