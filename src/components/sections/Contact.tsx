@@ -331,7 +331,7 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold">Cargo Details (Commodity, Weight, Volume)</label>
+                    <label className="text-sm font-semibold">Cargo Details (Cargo type, Commodity, Weight, Volume)</label>
                     <Textarea 
                       {...form.register("details")} 
                       placeholder="Please provide details about the cargo, required Incoterms, and target dates."

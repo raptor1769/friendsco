@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { services } from "@/components/sections/Services";
+import logo from "@/assets/friendsco.png";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = React.useState(false);
@@ -77,18 +78,28 @@ export function Navbar() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className={`p-2 rounded flex items-center justify-center transition-colors ${isScrolled ? 'bg-primary' : 'bg-primary'}`}>
-              <Anchor className="w-5 h-5 text-white" />
+          {/* <Link href="/" className="flex items-center gap-2 group">
+            <div className={`p-2 rounded flex items-center justify-center transition-colors`}>
+              <img src={logo} alt="Friendco Logistics Solutions" className="w-10 h-10" />
             </div>
-            <span className={`font-bold text-l tracking-tight transition-colors ${isScrolled ? 'text-foreground' : 'text-white'}`}>
-              Friendco Logistics Solutions
-            </span>
+          </Link> */}
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="rounded-lg bg-white transition-colors group-hover:bg-gray-100">
+              <img
+                src={logo}
+                alt="Friendco Logistics Solutions"
+                className="w-12 h-12 rounded-md"
+              />
+            </div>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            <DropdownMenu modal={false} open={servicesMenuOpen} onOpenChange={setServicesMenuOpen}>
+            <DropdownMenu
+              modal={false}
+              open={servicesMenuOpen}
+              onOpenChange={setServicesMenuOpen}
+            >
               <DropdownMenuTrigger
                 className={`text-sm font-medium transition-colors hover:text-primary ${
                   isScrolled ? "text-muted-foreground" : "text-gray-200"
@@ -103,8 +114,13 @@ export function Navbar() {
                 className="w-[380px] overflow-hidden rounded-[1.4rem] border border-slate-200 bg-white p-3 text-foreground shadow-[0_24px_70px_rgba(15,23,42,0.22)] ring-1 ring-slate-950/5"
               >
                 <div className="mb-2 rounded-2xl bg-gradient-to-br from-slate-950 to-slate-800 px-4 py-4 text-white shadow-inner">
-                  <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-primary">Freight Services</p>
-                  <p className="mt-1 text-sm text-slate-300">Choose a service and get a quote path tailored to that movement.</p>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
+                    Freight Services
+                  </p>
+                  <p className="mt-1 text-sm text-slate-300">
+                    Choose a service and get a quote path tailored to that
+                    movement.
+                  </p>
                 </div>
                 <DropdownMenuItem asChild>
                   <Link
@@ -114,7 +130,9 @@ export function Navbar() {
                   >
                     <span className="flex items-center justify-between">
                       All Services
-                      <span className="text-xs uppercase tracking-wider text-primary">Overview</span>
+                      <span className="text-xs uppercase tracking-wider text-primary">
+                        Overview
+                      </span>
                     </span>
                   </Link>
                 </DropdownMenuItem>
@@ -130,7 +148,9 @@ export function Navbar() {
                           <service.icon className="h-5 w-5" />
                         </span>
                         <span>
-                          <span className="block font-bold">{service.title}</span>
+                          <span className="block font-bold">
+                            {service.title}
+                          </span>
                           <span className="mt-1 line-clamp-2 block text-xs leading-relaxed text-slate-500">
                             {service.description}
                           </span>
@@ -161,10 +181,14 @@ export function Navbar() {
 
           {/* CTA */}
           <div className="hidden md:block">
-            <Button 
+            <Button
               onClick={scrollToQuote}
-              size="lg" 
-              className={isScrolled ? "cursor-pointer select-none bg-primary text-white hover:bg-primary/90" : "cursor-pointer select-none bg-white text-primary hover:bg-gray-100"}
+              size="lg"
+              className={
+                isScrolled
+                  ? "cursor-pointer select-none bg-primary text-white hover:bg-primary/90"
+                  : "cursor-pointer select-none bg-white text-primary hover:bg-gray-100"
+              }
             >
               Request Quote
             </Button>
@@ -172,10 +196,14 @@ export function Navbar() {
 
           {/* Mobile Toggle */}
           <button
-            className={`md:hidden p-2 ${isScrolled ? 'text-foreground' : 'text-white'}`}
+            className={`md:hidden p-2 ${isScrolled ? "text-foreground" : "text-white"}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -184,31 +212,37 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="absolute top-full left-3 right-3 rounded-b-[1.5rem] border border-slate-200 bg-white p-4 shadow-[0_24px_60px_rgba(15,23,42,0.24)] ring-1 ring-slate-950/5 md:hidden">
           <div className="mb-4 rounded-2xl border border-slate-100 bg-slate-50 p-3 shadow-inner">
-          <Link
-            href="/services"
-            onClick={() => setMobileMenuOpen(false)}
+            <Link
+              href="/services"
+              onClick={() => setMobileMenuOpen(false)}
               className="flex cursor-pointer select-none items-center justify-between rounded-xl px-3 py-3 text-left font-bold text-slate-950 hover:bg-orange-50"
-          >
+            >
               Services
-              <span className="text-xs uppercase tracking-wider text-primary">View all</span>
-          </Link>
+              <span className="text-xs uppercase tracking-wider text-primary">
+                View all
+              </span>
+            </Link>
             <div className="mt-2 grid gap-2">
-            {services.map((service) => (
-              <Link
-                key={service.slug}
-                href={`/services/${service.slug}`}
-                onClick={() => setMobileMenuOpen(false)}
+              {services.map((service) => (
+                <Link
+                  key={service.slug}
+                  href={`/services/${service.slug}`}
+                  onClick={() => setMobileMenuOpen(false)}
                   className="flex cursor-pointer select-none items-center gap-3 rounded-xl border border-transparent px-3 py-3 text-sm text-slate-700 hover:border-primary/20 hover:bg-orange-50"
-              >
+                >
                   <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-primary/10 text-primary ring-1 ring-primary/15">
                     <service.icon className="h-4 w-4" />
                   </span>
                   <span>
-                    <span className="block font-semibold text-slate-950">{service.title}</span>
-                    <span className="block text-xs text-slate-500">{service.tags.slice(0, 2).join(" / ")}</span>
+                    <span className="block font-semibold text-slate-950">
+                      {service.title}
+                    </span>
+                    <span className="block text-xs text-slate-500">
+                      {service.tags.slice(0, 2).join(" / ")}
+                    </span>
                   </span>
-              </Link>
-            ))}
+                </Link>
+              ))}
             </div>
           </div>
           <Link
@@ -225,7 +259,10 @@ export function Navbar() {
           >
             Expertise
           </Link>
-          <Button onClick={scrollToQuote} className="mt-4 w-full cursor-pointer select-none bg-primary text-white hover:bg-primary/90">
+          <Button
+            onClick={scrollToQuote}
+            className="mt-4 w-full cursor-pointer select-none bg-primary text-white hover:bg-primary/90"
+          >
             Request Quote
           </Button>
         </div>
