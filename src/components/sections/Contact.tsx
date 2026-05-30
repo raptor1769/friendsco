@@ -1,8 +1,8 @@
 import React from "react";
+import emailjs from "@emailjs/browser";
 import { motion } from "framer-motion";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldErrors, type Resolver } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,18 +15,53 @@ import {
 } from "@/components/ui/select";
 import { CheckCircle2 } from "lucide-react";
 import { getServiceBySlug, services } from "@/components/sections/Services";
+import { appConfig, getMissingEmailConfig } from "@/config/env";
+import { cn } from "@/lib/utils";
 
 const quoteSchema = z.object({
-  fullName: z.string().min(2, "Name is required"),
-  company: z.string().min(2, "Company is required"),
-  email: z.string().email("Invalid email address"),
-  freightType: z.string().min(1, "Please select freight type"),
-  origin: z.string().min(2, "Origin port/city is required"),
-  destination: z.string().min(2, "Destination port/city is required"),
-  details: z.string().optional(),
+  fullName: z.string().trim().min(2, "Name is required"),
+  company: z.string().trim().min(2, "Company is required"),
+  email: z.string().trim().min(1, "Email address is required").email("Invalid email address"),
+  phone: z.string().trim().min(7, "Phone number is required"),
+  freightType: z.string().trim().min(1, "Please select freight type"),
+  origin: z.string().trim().min(2, "Origin port/city is required"),
+  destination: z.string().trim().min(2, "Destination port/city is required"),
+  details: z.string().trim().min(1, "Cargo details are required"),
 });
 
 type QuoteFormValues = z.infer<typeof quoteSchema>;
+
+const quoteResolver: Resolver<QuoteFormValues> = (values) => {
+  const result = quoteSchema.safeParse(values);
+
+  if (result.success) {
+    return {
+      values: result.data,
+      errors: {},
+    };
+  }
+
+  const errors = result.error.issues.reduce<FieldErrors<QuoteFormValues>>(
+    (fieldErrors, issue) => {
+      const fieldName = issue.path[0] as keyof QuoteFormValues | undefined;
+
+      if (fieldName && !fieldErrors[fieldName]) {
+        fieldErrors[fieldName] = {
+          type: issue.code,
+          message: issue.message,
+        };
+      }
+
+      return fieldErrors;
+    },
+    {},
+  );
+
+  return {
+    values: {},
+    errors,
+  };
+};
 
 type ContactProps = {
   selectedServiceSlug?: string;
@@ -34,14 +69,19 @@ type ContactProps = {
 
 export function Contact({ selectedServiceSlug }: ContactProps) {
   const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const [submitError, setSubmitError] = React.useState<string | null>(null);
+  const [isSending, setIsSending] = React.useState(false);
   const selectedService = getServiceBySlug(selectedServiceSlug);
 
   const form = useForm<QuoteFormValues>({
-    resolver: zodResolver(quoteSchema),
+    resolver: quoteResolver,
+    mode: "onSubmit",
+    reValidateMode: "onChange",
     defaultValues: {
       fullName: "",
       company: "",
       email: "",
+      phone: "",
       freightType: selectedService?.slug ?? "",
       origin: "",
       destination: "",
@@ -53,10 +93,73 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
     form.setValue("freightType", selectedService?.slug ?? "");
   }, [form, selectedService?.slug]);
 
-  const onSubmit = (data: QuoteFormValues) => {
-    // Client-side only simulation. Wire this to an API/email service when backend handling is ready.
-    void data;
-    setIsSubmitted(true);
+  const fieldClassName = (fieldName: keyof QuoteFormValues, className?: string) =>
+    cn(
+      "bg-slate-50",
+      form.formState.errors[fieldName] &&
+        "border-destructive focus-visible:ring-destructive",
+      className,
+    );
+
+  const handleInvalidSubmit = () => {
+    setSubmitError("Please fix the highlighted fields and try again.");
+  };
+
+  const onSubmit = async (data: QuoteFormValues) => {
+    setSubmitError(null);
+
+    if (getMissingEmailConfig().length > 0) {
+      setSubmitError("Email service is not configured yet. Please add the EmailJS environment variables.");
+      return;
+    }
+
+    setIsSending(true);
+
+    try {
+      // 1. Send to company
+      const companyEmail = await emailjs.send(
+        appConfig.emailjs.serviceId,
+        appConfig.emailjs.companyTemplateId,
+        {
+          to_email: appConfig.emailjs.companyEmail,
+          from_name: data.fullName,
+          from_email: data.email,
+          reply_to: data.email,
+          phone: data.phone,
+          company: data.company,
+          freight_type:
+            services.find((service) => service.slug === data.freightType)
+              ?.quotePrompt ?? data.freightType,
+          origin: data.origin,
+          destination: data.destination,
+          details: data.details || "Not provided",
+        },
+        { publicKey: appConfig.emailjs.publicKey },
+      );
+
+      // 2. Only if first email succeeds
+      if (companyEmail.status === 200) {
+        await emailjs.send(
+          appConfig.emailjs.serviceId,
+          appConfig.emailjs.customerTemplateId,
+          {
+            to_email: data.email,
+            from_name: data.fullName,
+            freight_type: data.freightType,
+            origin: data.origin,
+            destination: data.destination,
+          },
+          { publicKey: appConfig.emailjs.publicKey },
+        );
+      }
+
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Email sending failed:", error);
+      setSubmitError("Failed to send request. Please try again.");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -121,12 +224,15 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
                 </p>
                 <Button 
                   variant="outline" 
+                  className="cursor-pointer"
                   onClick={() => {
                     setIsSubmitted(false);
+                    setSubmitError(null);
                     form.reset({
                       fullName: "",
                       company: "",
                       email: "",
+                      phone: "",
                       freightType: selectedService?.slug ?? "",
                       origin: "",
                       destination: "",
@@ -145,18 +251,18 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
                     We have preselected {selectedService.title}. Share the lane details and our team will tailor the quote around that service.
                   </p>
                 )}
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={form.handleSubmit(onSubmit, handleInvalidSubmit)} className="space-y-4" noValidate>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-sm font-semibold">Full Name</label>
-                      <Input {...form.register("fullName")} placeholder="John Doe" className="bg-slate-50" />
+                      <Input {...form.register("fullName")} placeholder="John Doe" className={fieldClassName("fullName")} />
                       {form.formState.errors.fullName && (
                         <p className="text-xs text-destructive">{form.formState.errors.fullName.message}</p>
                       )}
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-semibold">Company</label>
-                      <Input {...form.register("company")} placeholder="Acme Corp" className="bg-slate-50" />
+                      <Input {...form.register("company")} placeholder="Acme Corp" className={fieldClassName("company")} />
                       {form.formState.errors.company && (
                         <p className="text-xs text-destructive">{form.formState.errors.company.message}</p>
                       )}
@@ -165,9 +271,17 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
 
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">Email Address</label>
-                    <Input {...form.register("email")} type="email" placeholder="john@example.com" className="bg-slate-50" />
+                    <Input {...form.register("email")} type="email" placeholder="john@example.com" className={fieldClassName("email")} />
                     {form.formState.errors.email && (
                       <p className="text-xs text-destructive">{form.formState.errors.email.message}</p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold">Phone Number</label>
+                    <Input {...form.register("phone")} type="tel" placeholder="+1 555 123 4567" className={fieldClassName("phone")} />
+                    {form.formState.errors.phone && (
+                      <p className="text-xs text-destructive">{form.formState.errors.phone.message}</p>
                     )}
                   </div>
 
@@ -175,9 +289,15 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
                     <label className="text-sm font-semibold">Freight Type</label>
                     <Select
                       value={form.watch("freightType")}
-                      onValueChange={(val) => form.setValue("freightType", val, { shouldValidate: true })}
+                      onValueChange={(val) => {
+                        form.setValue("freightType", val, {
+                          shouldDirty: true,
+                          shouldValidate: false,
+                        });
+                        form.clearErrors("freightType");
+                      }}
                     >
-                      <SelectTrigger className="bg-slate-50">
+                      <SelectTrigger className={fieldClassName("freightType")}>
                         <SelectValue placeholder="Select transport mode" />
                       </SelectTrigger>
                       <SelectContent>
@@ -196,14 +316,14 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-sm font-semibold">Origin</label>
-                      <Input {...form.register("origin")} placeholder="e.g. Shanghai, CN" className="bg-slate-50" />
+                      <Input {...form.register("origin")} placeholder="e.g. Shanghai, CN" className={fieldClassName("origin")} />
                       {form.formState.errors.origin && (
                         <p className="text-xs text-destructive">{form.formState.errors.origin.message}</p>
                       )}
                     </div>
                     <div className="space-y-2">
                       <label className="text-sm font-semibold">Destination</label>
-                      <Input {...form.register("destination")} placeholder="e.g. Los Angeles, US" className="bg-slate-50" />
+                      <Input {...form.register("destination")} placeholder="e.g. Los Angeles, US" className={fieldClassName("destination")} />
                       {form.formState.errors.destination && (
                         <p className="text-xs text-destructive">{form.formState.errors.destination.message}</p>
                       )}
@@ -215,13 +335,25 @@ export function Contact({ selectedServiceSlug }: ContactProps) {
                     <Textarea 
                       {...form.register("details")} 
                       placeholder="Please provide details about the cargo, required Incoterms, and target dates."
-                      className="resize-none h-24 bg-slate-50"
+                      className={fieldClassName("details", "resize-none h-24")}
                     />
+                    {form.formState.errors.details && (
+                      <p className="text-xs text-destructive">{form.formState.errors.details.message}</p>
+                    )}
                   </div>
 
-                  <Button type="submit" className="w-full h-12 text-base font-bold bg-primary hover:bg-primary/90 mt-2">
-                    Request Quote
+                  <Button
+                    type="submit"
+                    disabled={isSending}
+                    className="w-full h-12 cursor-pointer text-base font-bold bg-primary hover:bg-primary/90 mt-2"
+                  >
+                    {isSending ? "Sending..." : "Request Quote"}
                   </Button>
+                  {submitError && (
+                    <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-center text-sm text-destructive" role="alert">
+                      {submitError}
+                    </p>
+                  )}
                 </form>
               </>
             )}
