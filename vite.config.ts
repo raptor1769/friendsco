@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
   const base = env.VITE_GITHUB_PAGES_BASE || defaultGitHubPagesBase;
 
   return {
-    base,
+    base: "/",
 
     plugins: [react(), tailwindcss()],
 

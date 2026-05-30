@@ -61,20 +61,20 @@ export const services: Service[] = [
     ],
     quotePrompt: "Land Transportation",
   },
-  {
-    title: "Contract Logistics",
-    slug: "contract-logistics",
-    description: "Strategic warehousing and distribution solutions. We handle inventory management, cross-docking, and order fulfillment in secure, strategically located facilities.",
-    icon: Package,
-    image: warehouseImg,
-    tags: ["Cross-docking", "Inventory Control", "Fulfillment"],
-    highlights: [
-      "Flexible warehousing near key ports and consumption markets",
-      "Cross-docking programs that shorten dwell time",
-      "Inventory control and fulfillment support for growing operations",
-    ],
-    quotePrompt: "Contract Logistics",
-  },
+  // {
+  //   title: "Contract Logistics",
+  //   slug: "contract-logistics",
+  //   description: "Strategic warehousing and distribution solutions. We handle inventory management, cross-docking, and order fulfillment in secure, strategically located facilities.",
+  //   icon: Package,
+  //   image: warehouseImg,
+  //   tags: ["Cross-docking", "Inventory Control", "Fulfillment"],
+  //   highlights: [
+  //     "Flexible warehousing near key ports and consumption markets",
+  //     "Cross-docking programs that shorten dwell time",
+  //     "Inventory control and fulfillment support for growing operations",
+  //   ],
+  //   quotePrompt: "Contract Logistics",
+  // },
 ];
 
 export function getServiceBySlug(slug?: string) {

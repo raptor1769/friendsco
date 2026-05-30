@@ -81,8 +81,8 @@ export function Navbar() {
             <div className={`p-2 rounded flex items-center justify-center transition-colors ${isScrolled ? 'bg-primary' : 'bg-primary'}`}>
               <Anchor className="w-5 h-5 text-white" />
             </div>
-            <span className={`font-bold text-xl tracking-tight transition-colors ${isScrolled ? 'text-foreground' : 'text-white'}`}>
-              Friendco
+            <span className={`font-bold text-l tracking-tight transition-colors ${isScrolled ? 'text-foreground' : 'text-white'}`}>
+              Friendco Logistics Solutions
             </span>
           </Link>
 
