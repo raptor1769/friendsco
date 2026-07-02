@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "wouter";
 import { Anchor } from "lucide-react";
+import { LinkedinIcon } from "@/components/icons/LinkedinIcon";
 import { services } from "@/components/sections/Services";
 import logo from "@/assets/apple-touch-icon.png";
 
@@ -37,6 +38,18 @@ export function Footer() {
               reliability, and unparalleled expertise in international freight
               forwarding.
             </p>
+            <a
+              href="https://www.linkedin.com/company/friendscologisticssolutions/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Friendco Logistics Solutions on LinkedIn"
+              className="inline-flex items-center gap-2 text-gray-400 transition-colors hover:text-white"
+            >
+              <span className="flex h-6 w-6 items-center justify-center overflow-hidden rounded bg-white text-[#0A66C2]">
+                <LinkedinIcon className="h-full w-full" />
+              </span>
+              <span>Follow us on LinkedIn</span>
+            </a>
           </div>
 
           <div>
